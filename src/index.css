@@ -91,6 +91,7 @@ body::before {
   color: var(--black);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
+  overflow-wrap: anywhere;
 }
 
 .contact-links {

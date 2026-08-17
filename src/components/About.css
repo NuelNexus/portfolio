@@ -1467,12 +1467,81 @@
   .about .hyp-banner-topr {
     display: none;
   }
+  .about .hyp-banner {
+    grid-template-columns: minmax(0, 44%) 9px minmax(0, 1fr);
+    gap: 30px;
+  }
+  .about .hyp-banner-name,
+  .about .hyp-banner-name b {
+    font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+    white-space: normal;
+  }
   .about .hyp-banner-render {
     justify-content: flex-start;
+    min-width: 0;
   }
   .about .hyp-banner-render::before,
   .about .hyp-banner-render::after {
-    margin-left: -100px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 836 / 1071;
+    max-width: 575px;
+    margin: -30% 0 0 -8%;
+  }
+}
+
+@media (max-width: 1230px) {
+  .about .hyp-wrapper {
+    padding: 60px 50px;
+  }
+  .about .hyp-ban {
+    margin: -60px -50px;
+    padding: 60px 50px;
+  }
+  .about .hyp-banner-name,
+  .about .hyp-banner-name b {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+  }
+  .about .hyp-banner-event {
+    padding: 30px 20px 35px;
+  }
+  .about .hyp-genres {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 30px;
+  }
+  .about .hyp-genre {
+    min-width: 0;
+    grid-template-columns: 9px minmax(0, 1fr);
+    gap: 30px;
+  }
+  .about .hyp-genre-bot {
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+    gap: 0px 30px;
+  }
+  .about .hyp-banner-event-left {
+    font-size: clamp(20px, 3vw, 30px);
+    white-space: normal;
+  }
+  .about .hyp-banner-event-icon {
+    font-size: 110px;
+    top: -20px;
+  }
+  .about .hyp-banner-event-right {
+    font-size: 70px;
+    right: 15px;
+    bottom: 15px;
+  }
+  .about .hyp-cat {
+    gap: 25px;
+    padding: 30px 35px;
+    font-size: 28px;
+  }
+  .about .hyp-cat1-links a {
+    font-size: 22px;
+    padding: 14px 8px;
+  }
+  .about .hyp-cat1-links::before {
+    margin-right: 24px;
   }
 }
 
@@ -1628,6 +1697,40 @@
     grid-template-columns: 1fr;
     gap: 30px;
   }
+  .about .hyp-banner-top {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+  .about .hyp-banner-top1 {
+    flex-wrap: wrap;
+  }
+  .about .hyp-banner-sub {
+    width: auto;
+    min-width: 0;
+  }
+  .about .hyp-banner-left,
+  .about .hyp-banner-divide,
+  .about .hyp-banner-img {
+    min-width: 0;
+  }
+  .about .hyp-banner-event-left {
+    font-size: clamp(20px, 7vw, 32px);
+    white-space: normal;
+  }
+  .about .hyp-banner-event-right {
+    font-size: 70px;
+    right: 15px;
+    bottom: 15px;
+  }
+  .about .hyp-genre {
+    min-width: 0;
+    grid-template-columns: 9px minmax(0, 1fr);
+    gap: 30px;
+  }
+  .about .hyp-genre-bot {
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+    gap: 0px 30px;
+  }
   .about .hyp-banner-name,
   .about .hyp-banner-name b {
     font-size: clamp(2.4rem, 9vw, 3.4rem);
@@ -1680,6 +1783,10 @@
   .about .hyp-genres {
     grid-template-columns: 1fr;
     gap: 30px;
+  }
+  .about .hyp-genres-left,
+  .about .hyp-genres-right {
+    min-width: 0;
   }
   .about .hyp-genres-anchor {
     position: static;
