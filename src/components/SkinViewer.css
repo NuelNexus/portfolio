@@ -1,0 +1,454 @@
+/* Minecraft skin viewer — adapted from the pasted CodePen-style widget.
+   The skin (--skin) is set inline by SkinViewer.jsx (NuelNexus.png). */
+
+.skin-viewer {
+  display: inline-block;
+  font-family: 'MinecraftiaRegular', 'Courier New', monospace;
+}
+
+/* 3D stage — plain, no glassy background/glow */
+.skin-viewer .container3d {
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  display: inline-flex;
+  perspective: 50px;
+  perspective-origin: 50% calc(50% - 250px);
+  pointer-events: none;
+  vertical-align: top;
+}
+
+.skin-viewer .scene {
+  position: relative;
+  transform-style: preserve-3d;
+  height: fit-content;
+  scale: 10;
+  animation: skin-spin 7s infinite cubic-bezier(0.64, -1.16, 0.33, 2);
+  image-rendering: pixelated;
+}
+
+.skin-viewer .scene > * {
+  transform-style: preserve-3d;
+}
+
+@keyframes skin-spin {
+  0% {
+    transform: rotateY(0deg) translateY(0);
+  }
+  50% {
+    transform: rotateY(180deg) translateY(-0.1rem);
+  }
+  100% {
+    transform: rotateY(360deg) translateY(0);
+  }
+}
+
+.skin-viewer .container1 {
+  width: fit-content;
+  height: fit-content;
+  margin: 0 auto;
+}
+
+.skin-viewer .container1 > .container3d {
+  scale: 1.25;
+}
+
+/* 3D faces */
+.skin-viewer .scene div div {
+  image-rendering: pixelated;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%);
+}
+
+/* Layer 2 (hat/jacket) overlay faces — the outer layer of the skin.
+   The ::after positions below map to the classic skin overlay regions
+   (hat at (32-63, 0-15), jacket at (16-39, 32-47), etc.), matching how
+   NuelNexus.png stores its outer layer. */
+.skin-viewer .scene div div::after {
+  content: ' ';
+  position: absolute;
+  align-self: center;
+  height: 100%;
+  width: 100%;
+  scale: 1.125;
+  background: #ffffff01;
+  image-rendering: pixelated;
+}
+
+/* Normalize any skin image (64x64 or HD) onto the 64x64 layout grid */
+.skin-viewer .scene div div,
+.skin-viewer .scene div div::after {
+  background-size: 64px 64px;
+}
+
+.skin-viewer .scene[data-skin='url'] div div,
+.skin-viewer .scene[data-skin='url'] div div::after {
+  background-image: var(--skin);
+}
+
+.skin-viewer .head {
+  height: 8px;
+  width: 8px;
+}
+
+.skin-viewer #head-front {
+  background-position: 56px 56px;
+  transform: translateZ(4px);
+}
+
+.skin-viewer #head-front::after {
+  background-position: 24px 56px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #head-back {
+  background-position: 40px 56px;
+  transform: rotateY(180deg) translateZ(4px);
+}
+
+.skin-viewer #head-back::after {
+  background-position: 8px 56px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #head-left {
+  background-position: 48px 56px;
+  transform: rotateY(90deg) translateZ(4px);
+}
+
+.skin-viewer #head-left::after {
+  background-position: 16px 56px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #head-right {
+  background-position: 64px 56px;
+  transform: rotateY(-90deg) translateZ(4px);
+}
+
+.skin-viewer #head-right::after {
+  background-position: 32px 56px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #head-top {
+  background-position: 56px 64px;
+  transform: translateY(-4px) rotateX(90deg);
+}
+
+.skin-viewer #head-top::after {
+  background-position: 24px 64px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #head-bottom {
+  background-position: 48px 64px;
+  transform: translateY(4px) rotateX(270deg) rotate(180deg);
+}
+
+.skin-viewer #head-bottom::after {
+  background-position: 16px 64px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer .body {
+  width: 8px;
+  height: 12px;
+}
+
+.skin-viewer #body-front {
+  background-position: 44px 44px;
+  transform: translateZ(2px);
+}
+
+.skin-viewer #body-front::after {
+  background-position: 44px 28px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #body-back {
+  background-position: 32px 44px;
+  transform: rotateY(180deg) translateZ(2px);
+}
+
+.skin-viewer #body-back::after {
+  background-position: 32px 28px;
+  transform: translateZ(0.5px);
+}
+
+.skin-viewer #body-left {
+  width: 4px;
+  background-position: 36px 44px;
+  transform: rotateY(90deg) translateZ(6px);
+}
+
+.skin-viewer #body-left::after {
+  content: none;
+}
+
+.skin-viewer #body-right {
+  width: 4px;
+  background-position: 48px 44px;
+  transform: rotateY(-90deg) translateZ(2px);
+}
+
+.skin-viewer #body-right::after {
+  content: none;
+}
+
+.skin-viewer #body-bottom {
+  width: 8px;
+  height: 4px;
+  background-position: 36px 48px;
+  transform: translateY(10px) rotateX(270deg);
+}
+
+.skin-viewer #body-bottom::after {
+  display: none;
+}
+
+.skin-viewer .left-slim-arm {
+  position: absolute;
+  width: 3px;
+  height: 12px;
+  transform: translateX(8px) translateY(-12px);
+}
+
+.skin-viewer #left-slim-arm-front {
+  background-position: 28px 12px;
+  transform: translateZ(2px);
+}
+
+.skin-viewer #left-slim-arm-front::after {
+  background-position: 12px 12px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #left-slim-arm-back {
+  background-position: 21px 12px;
+  transform: rotateY(180deg) translateZ(2px);
+}
+
+.skin-viewer #left-slim-arm-back::after {
+  background-position: 8px 12px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #left-slim-arm-left {
+  width: 4px;
+  background-position: 25px 12px;
+  transform: rotateY(90deg) translateZ(1px);
+}
+
+.skin-viewer #left-slim-arm-left::after {
+  background-position: 9px 12px;
+  transform: translateZ(0.15px);
+}
+
+.skin-viewer #left-slim-arm-top {
+  width: 3px;
+  height: 4px;
+  background-position: 28px 16px;
+  transform: translateY(-2px) rotateX(90deg);
+}
+
+.skin-viewer #left-slim-arm-top::after {
+  background-position: 12px 16px;
+  transform: translateZ(0.7px);
+}
+
+.skin-viewer #left-slim-arm-bottom {
+  width: 3px;
+  height: 4px;
+  background-position: 25px 16px;
+  transform: translateY(10px) rotateX(270deg);
+}
+
+.skin-viewer #left-slim-arm-bottom::after {
+  background-position: 14px 16px;
+  transform: translateZ(0.7px);
+}
+
+.skin-viewer .right-slim-arm {
+  transform-style: preserve-3d;
+  position: absolute;
+  width: 3px;
+  height: 12px;
+  transform: translateX(-3px) translateY(-12px);
+}
+
+.skin-viewer #right-slim-arm-front {
+  background-position: 20px 44px;
+  transform: translateZ(2px);
+}
+
+.skin-viewer #right-slim-arm-front::after {
+  background-position: 20px 28px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #right-slim-arm-back {
+  background-position: 13px 44px;
+  transform: rotateY(180deg) translateZ(2px);
+}
+
+.skin-viewer #right-slim-arm-back::after {
+  background-position: 13px 28px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #right-slim-arm-right {
+  width: 4px;
+  background-position: 17px 44px;
+  transform: rotateY(270deg) translateZ(2px);
+}
+
+.skin-viewer #right-slim-arm-right::after {
+  background-position: 17px 28px;
+  transform: translateZ(0.15px);
+}
+
+.skin-viewer #right-slim-arm-top {
+  width: 3px;
+  height: 4px;
+  background-position: 20px 48px;
+  transform: translateY(-2px) rotateX(90deg);
+}
+
+.skin-viewer #right-slim-arm-top::after {
+  background-position: 20px 32px;
+  transform: translateZ(0.7px);
+}
+
+.skin-viewer #right-slim-arm-bottom {
+  width: 3px;
+  height: 4px;
+  background-position: 17px 48px;
+  transform: translateY(10px) rotateX(270deg);
+}
+
+.skin-viewer #right-slim-arm-bottom::after {
+  background-position: 17px 32px;
+  transform: translateZ(0.7px);
+}
+
+.skin-viewer .left-leg {
+  position: absolute;
+  width: 4px;
+  height: 12px;
+  transform: translateX(4px) translateY(0px);
+}
+
+.skin-viewer #left-leg-front {
+  background-position: 44px 12px;
+  transform: translateZ(2px);
+}
+
+.skin-viewer #left-leg-front::after {
+  background-position: 60px 12px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #left-leg-back {
+  background-position: 36px 12px;
+  transform: rotateY(180deg) translateZ(2px);
+}
+
+.skin-viewer #left-leg-back::after {
+  background-position: 52px 12px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #left-leg-left {
+  width: 4px;
+  background-position: 40px 12px;
+  transform: rotateY(90deg) translateZ(2px);
+}
+
+.skin-viewer #left-leg-left::after {
+  background-position: 56px 12px;
+  transform: translateZ(0.15px);
+}
+
+.skin-viewer #left-leg-top {
+  width: 4px;
+  height: 4px;
+  background-position: 44px 16px;
+  transform: translateY(-2px) rotateX(90deg);
+}
+
+.skin-viewer #left-leg-top::after {
+  display: none;
+}
+
+.skin-viewer #left-leg-bottom {
+  width: 4px;
+  height: 4px;
+  background-position: 40px 16px;
+  transform: translateY(10px) rotateX(270deg);
+}
+
+.skin-viewer #left-leg-bottom::after {
+  background-position: 56px 32px;
+  transform: translateZ(0.7px);
+}
+
+.skin-viewer .right-leg {
+  width: 4px;
+  height: 12px;
+  transform: translateX(0px) translateY(0px);
+}
+
+.skin-viewer #right-leg-front {
+  background-position: 60px 44px;
+  transform: translateZ(2px);
+}
+
+.skin-viewer #right-leg-front::after {
+  background-position: 60px 28px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #right-leg-back {
+  background-position: 52px 44px;
+  transform: rotateY(180deg) translateZ(2px);
+}
+
+.skin-viewer #right-leg-back::after {
+  background-position: 52px 28px;
+  transform: translateZ(0.3px);
+}
+
+.skin-viewer #right-leg-right {
+  width: 4px;
+  background-position: 64px 44px;
+  transform: rotateY(270deg) translateZ(2px);
+}
+
+.skin-viewer #right-leg-right::after {
+  background-position: 64px 28px;
+  transform: translateZ(0.15px);
+}
+
+.skin-viewer #right-leg-top {
+  width: 4px;
+  height: 4px;
+  background-position: 60px 48px;
+  transform: translateY(-2px) rotateX(90deg);
+}
+
+.skin-viewer #right-leg-top::after {
+  display: none;
+}
+
+.skin-viewer #right-leg-bottom {
+  width: 4px;
+  height: 4px;
+  background-position: 56px 48px;
+  transform: translateY(10px) rotateX(270deg);
+}

@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --nav-height: 60px;
+  --black: hsl(0 0% 2%);
+  --white: hsl(0 0% 98%);
+  --content-width: 120ch;
+  --accent: hsl(10 90% 50%);
+
+  --jump: cover 15% cover 45%;
+  --spin: cover 15% cover 45%;
+  --flip: cover 15% cover 45%;
+  --open: cover 15% cover 45%;
+  --straighten: contain 25% contain 65%;
+  --zoom: contain 25% exit -20%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  font-family: sans-serif, system-ui;
+  background: var(--white);
+  color: var(--black);
+}
+
+body::before {
+  --line: color-mix(in lch, canvasText 45%, transparent);
+  --size: 60px;
+  content: '';
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  background: linear-gradient(
+        90deg,
+        var(--line) 1px,
+        transparent 1px var(--size)
+      )
+      50% 50% / var(--size) var(--size),
+    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
+      var(--size) var(--size);
+  mask: linear-gradient(-15deg, transparent 40%, white);
+  top: 0;
+  transform-style: flat;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.section {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: clamp(5rem, 10vw, 9rem) clamp(1.5rem, 5vw, 3rem);
+}
+
+.section__title {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(2.25rem, 4vw + 1rem, 4.5rem);
+  line-height: 1;
+  font-weight: 600;
+  margin: 0 0 2rem;
+}
+
+.section__title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.section__lede {
+  font-size: clamp(1.05rem, 1.2vw + 0.6rem, 1.35rem);
+  line-height: 1.6;
+  max-width: 65ch;
+  color: color-mix(in lch, var(--black) 72%, transparent);
+}
+
+.section__lede strong {
+  color: var(--black);
+}
+
+.email-link {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+  color: var(--black);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.contact-links {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.contact-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid color-mix(in lch, var(--black) 30%, transparent);
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--black);
+  font-weight: 600;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.contact-links a:hover,
+.contact-links a:focus-visible {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+.contact-links svg {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+html.dark-theme {
+  --accent: hsl(10 90% 62%);
+
+  color-scheme: dark;
+}
+
+html.dark-theme body {
+  background: #0f0f12;
+  color: #e8e8ea;
+}
+
+html.dark-theme .section__lede {
+  color: color-mix(in lch, #e8e8ea 72%, transparent);
+}
+
+html.dark-theme .section__lede strong {
+  color: #ffffff;
+}
+
+html.dark-theme .email-link {
+  color: #ffffff;
+}
+
+html.dark-theme .contact-links a {
+  border-color: color-mix(in lch, #e8e8ea 35%, transparent);
+  color: #e8e8ea;
+}
+
+html.dark-theme .contact-links a:hover,
+html.dark-theme .contact-links a:focus-visible {
+  background: #ffffff;
+  color: #0f0f12;
+  border-color: #ffffff;
+}
+
+html.dark-theme .about-link {
+  color: #e8e8ea;
+}
+
+html.dark-theme .footer-link {
+  color: #e8e8ea;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 2rem;
+  right: calc(2rem + 180px);
+  width: 48px;
+  aspect-ratio: 1;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in lch, canvasText 25%, transparent);
+  border-radius: 50%;
+  background: color-mix(in lch, canvasText 6%, transparent);
+  color: canvasText;
+  font-size: 1.25rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+footer {
+  padding: 2rem;
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+}
+
+.footer-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--white);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  opacity: 0.8;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+  opacity: 1;
+  color: var(--accent);
+}

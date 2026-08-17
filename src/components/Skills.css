@@ -1,0 +1,127 @@
+
+
+.skills {
+  overflow-x: clip;
+}
+
+.skills .books-grid *,
+.skills .books-grid *::before,
+.skills .books-grid *::after {
+  box-sizing: border-box;
+}
+
+.skills .books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  max-width: var(--content-width);
+  margin: 4rem auto 8rem;
+  padding: 1rem;
+  justify-items: center;
+}
+
+.skills .book {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skills .cube {
+  --w: clamp(120px, 13vw, 185px);
+  --h: calc(var(--w) * 1.42);
+  --d: calc(var(--w) * 0.16);
+  width: var(--w);
+  height: var(--h);
+  position: relative;
+  transform-style: preserve-3d;
+  transform: perspective(1400px) rotateX(6deg) rotateY(-24deg) rotateZ(-5deg);
+  transition: transform 0.55s cubic-bezier(0.34, 1.3, 0.5, 1);
+  cursor: pointer;
+}
+
+.skills .cube.active {
+  transform: perspective(1400px) rotateX(10deg) rotateY(-6deg) rotateZ(-5deg)
+    translateY(-60px);
+  z-index: 5;
+}
+
+.skills .face {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  backface-visibility: hidden;
+}
+
+.skills .face.front {
+  width: var(--w);
+  height: var(--h);
+  transform: translate(-50%, -50%) translateZ(calc(var(--d) / 2));
+  background: #fff;
+  border: 2px solid #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14% 13% 20%;
+}
+
+.skills .face.front img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.skills .face.front::after {
+  content: var(--book-title, '');
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px 10px;
+  background: var(--book-color, #1d1d1d);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.skills .face.back {
+  width: var(--w);
+  height: var(--h);
+  transform: translate(-50%, -50%) rotateY(180deg) translateZ(calc(var(--d) / 2));
+  background: #151515;
+  border: 2px solid #222;
+}
+
+.skills .face.right {
+  width: var(--d);
+  height: var(--h);
+  transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--w) / 2));
+  background: #262626;
+}
+
+.skills .face.left {
+  width: var(--d);
+  height: var(--h);
+  transform: translate(-50%, -50%) rotateY(-90deg) translateZ(calc(var(--w) / 2));
+  background: repeating-linear-gradient(to bottom, #eee 0 6px, #c9c9c9 6px 12px);
+}
+
+.skills .face.top {
+  width: var(--w);
+  height: var(--d);
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--h) / 2));
+  background: repeating-linear-gradient(to right, #f5f5f5 0 8px, #d8d8d8 8px 16px);
+}
+
+.skills .face.bottom {
+  width: var(--w);
+  height: var(--d);
+  transform: translate(-50%, -50%) rotateX(-90deg) translateZ(calc(var(--h) / 2));
+  background: #e8e8e8;
+}

@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+.achievements {
+  height: 500vh;
+  position: relative;
+}
+
+.achievements__viewport {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f7f7f5;
+  color: #111;
+  font-family: 'Lato', sans-serif;
+}
+
+.achievements__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.achievements__canvas canvas {
+  display: block;
+}
+
+.achievements__ui {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.achievements__logo {
+  position: absolute;
+  top: 40px;
+  left: 50px;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  z-index: 10;
+
+  pointer-events: none;
+}
+
+.slide-content {
+  position: absolute;
+  top: 25%;
+  left: 8%;
+  width: 30%;
+  max-width: 450px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease-out;
+  pointer-events: auto;
+
+  border: none;
+  padding: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.slide-content:hover,
+.slide-content:focus-visible {
+  outline: none;
+}
+
+.slide-content.active:hover h1 {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.achievements__hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #aaa;
+
+  pointer-events: none;
+}
+
+.slide-content.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.achievements h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 4rem;
+  margin: 0 0 1.5rem 0;
+  line-height: 1;
+  color: #0d0d0d;
+}
+
+.catalogue-number {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #999;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.description {
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 3rem;
+  text-align: justify;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  row-gap: 0.8rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1.5rem;
+}
+
+.meta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #888;
+  align-self: center;
+}
+
+.meta-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #222;
+}
+
+.achievements__hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #aaa;
+}
+
+html.dark-theme .achievements__viewport {
+  background-color: #141417;
+  color: #e8e8ea;
+}
+
+html.dark-theme .achievements h1 {
+  color: #f2f2f4;
+}
+
+html.dark-theme .catalogue-number {
+  color: #8b8b92;
+  border-bottom-color: #3a3a40;
+}
+
+html.dark-theme .description {
+  color: #b8b8bf;
+}
+
+html.dark-theme .meta-grid {
+  border-top-color: #3a3a40;
+}
+
+html.dark-theme .meta-label {
+  color: #8b8b92;
+}
+
+html.dark-theme .meta-value {
+  color: #e2e2e6;
+}
+
+html.dark-theme .achievements__hint {
+  color: #6f6f76;
+}
+
+@media (max-width: 768px) {
+  .achievements__logo {
+    top: 24px;
+    left: 24px;
+    font-size: 0.8rem;
+  }
+
+  .slide-content {
+    top: 14%;
+    left: 6%;
+    width: 88%;
+    max-width: none;
+  }
+
+  .achievements h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .achievements__hint {
+    bottom: 24px;
+    left: 24px;
+  }
+}
