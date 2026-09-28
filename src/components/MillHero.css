@@ -1,0 +1,620 @@
+/* ------------------------------------------------------------------
+   Mill hero — the "Mill" concept (fur ring + clay windmill) as the
+   opening section of the home page.
+
+   Everything is laid out on the concept's 1600 × 1000 Figma frame:
+   1 design px = var(--u), which scales with the viewport.
+   ------------------------------------------------------------------ */
+
+@font-face {
+  font-family: 'BBH Bartle';
+  src: url('../assets/mill/bbh-bartle-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Tight';
+  src: url('../assets/mill/inter-tight-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* the hero stays pinned for this extra scroll distance while the windmill
+   dives in, then the page scrolls up over it */
+.mill-pin {
+  --mill-pin: 160vh;
+  position: relative;
+  height: calc(100vh + var(--mill-pin));
+}
+
+@supports (height: 100svh) {
+  .mill-pin {
+    --mill-pin: 160svh;
+    height: calc(100svh + var(--mill-pin));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mill-pin {
+    --mill-pin: 0px;
+  }
+}
+
+.mill {
+  --u: min(calc(100vw / 1600), calc(100vh / 1000));
+  --mill-ink: var(--black);
+  --mill-display: 'BBH Bartle', 'Arial Black', Impact, sans-serif;
+  --mill-grotesk: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+  /* the centre of the ring's hole inside the render */
+  --mill-focus: 50.6% 48%;
+  --mill-scale: 1.04;
+
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 26rem;
+  overflow: clip;
+  cursor: url('../assets/mill/pixel-hand.svg') 11 1, auto;
+  /* vertical swipes scroll the page, horizontal drags spin the mill */
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@supports (height: 100svh) {
+  .mill {
+    --u: min(calc(100vw / 1600), calc(100svh / 1000));
+    height: 100svh;
+  }
+}
+
+.mill a {
+  cursor: url('../assets/mill/pixel-hand.svg') 11 1, pointer;
+}
+
+.mill__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- render ---------- */
+
+.mill__render {
+  position: absolute;
+  inset: 0;
+  transform-origin: var(--mill-focus);
+  pointer-events: none;
+}
+
+.mill__render img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--mill-focus);
+  transform-origin: var(--mill-focus);
+  scale: var(--mill-scale);
+  transition: opacity 900ms ease;
+}
+
+/* live 3D scene, framed by MillScene.js to line up with the image above */
+.mill__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.mill.is-live .mill__canvas {
+  opacity: 1;
+}
+
+.mill.is-live .mill__render img {
+  opacity: 0;
+}
+
+.mill__hint {
+  position: absolute;
+  right: calc(79 * var(--u));
+  bottom: calc(95 * var(--u));
+  margin: 0;
+  font-family: var(--mill-grotesk);
+  font-weight: 500;
+  font-size: max(12px, calc(22 * var(--u)));
+  letter-spacing: -0.01em;
+  color: var(--mill-ink);
+  opacity: 0;
+  translate: 0 6px;
+  transition: opacity 600ms ease 400ms, translate 600ms ease 400ms;
+  pointer-events: none;
+}
+
+.mill.is-live:not(.is-touched) .mill__hint {
+  opacity: 0.55;
+  translate: 0 0;
+}
+
+/* the glowing inset frame: a white stroke in overlay mode, so it lights
+   up the fur and disappears on the page background */
+.mill__frame {
+  position: absolute;
+  inset: calc(20 * var(--u));
+  border: calc(8 * var(--u)) solid #fff;
+  border-radius: calc(60 * var(--u));
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* ---------- UI layer ---------- */
+
+.mill__ui {
+  position: absolute;
+  inset: 0;
+  /* keep the links above the 3D skill blocks further down the page,
+     whose edge-on faces can otherwise swallow clicks */
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mill__ui > * {
+  pointer-events: auto;
+}
+
+.mill__type {
+  font-family: var(--mill-display);
+  font-weight: 400;
+  font-size: calc(70 * var(--u));
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.mill__line {
+  display: block;
+}
+
+/* nav — right-aligned to the same column as the headline */
+.mill__nav {
+  position: absolute;
+  top: calc(70 * var(--u));
+  left: 0;
+  width: calc(480 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--mill-grotesk);
+  font-weight: 500;
+  font-size: calc(40 * var(--u));
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.mill__nav a {
+  color: #fff;
+  text-decoration: none;
+  transition: translate 200ms ease, opacity 200ms ease;
+}
+
+.mill__nav a:hover,
+.mill__nav a:focus-visible {
+  translate: calc(-10 * var(--u)) 0;
+  text-decoration: underline;
+  text-decoration-thickness: max(2px, calc(3 * var(--u)));
+  text-underline-offset: 0.12em;
+}
+
+/* wordmark — top right, kept clear of the fixed social / theme buttons */
+.mill__mark {
+  position: absolute;
+  top: max(calc(67 * var(--u)), calc(2rem + 48px + 1.25rem));
+  right: calc(79 * var(--u));
+  display: flex;
+  align-items: flex-start;
+  gap: calc(10 * var(--u));
+  color: var(--mill-ink);
+}
+
+.mill__arrow {
+  flex: none;
+  width: calc(60 * var(--u));
+  height: calc(60 * var(--u));
+  margin-top: calc(-3 * var(--u));
+  fill: var(--accent);
+}
+
+.mill__copy {
+  display: inline-block;
+  width: 0.69em;
+  height: 0.69em;
+  margin-left: 0.14em;
+  vertical-align: -0.02em;
+  fill: none;
+  stroke: var(--accent);
+}
+
+.mill__copy circle {
+  stroke-width: 4.4;
+}
+
+.mill__copy path {
+  stroke-width: 6.4;
+}
+
+/* headline — bottom left, lines right-aligned to x = 480 */
+.mill__headline {
+  position: absolute;
+  left: 0;
+  bottom: calc(70 * var(--u));
+  width: calc(480 * var(--u));
+  margin: 0;
+  color: #fff;
+}
+
+.mill__headline .mill__type {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mill__block {
+  display: inline-block;
+  width: calc(155 * var(--u));
+  height: calc(50 * var(--u));
+  margin-right: calc(8 * var(--u));
+  vertical-align: 0.02em;
+  fill: currentColor;
+}
+
+/* glass "Discover" pill */
+.mill__cta {
+  position: absolute;
+  left: 50%;
+  bottom: calc(83 * var(--u));
+  translate: -50% 0;
+  width: calc(360 * var(--u));
+  height: calc(100 * var(--u));
+  padding: 0 calc(30 * var(--u)) 0 calc(50 * var(--u));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--mill-grotesk);
+  font-weight: 500;
+  font-size: calc(40 * var(--u));
+  letter-spacing: -0.04em;
+  background: linear-gradient(
+    100deg,
+    rgb(255 255 255 / 0.14),
+    rgb(255 255 255 / 0.02) 70%
+  );
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22),
+    0 calc(4 * var(--u)) calc(30 * var(--u)) rgb(90 20 0 / 0.18);
+  -webkit-backdrop-filter: blur(25px) saturate(140%);
+  backdrop-filter: blur(25px) saturate(140%);
+  transition: background 250ms ease, box-shadow 250ms ease;
+}
+
+.mill__cta svg {
+  width: calc(50 * var(--u));
+  height: calc(50 * var(--u));
+  fill: currentColor;
+  transition: rotate 500ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.mill__cta:hover,
+.mill__cta:focus-visible {
+  background: linear-gradient(
+    100deg,
+    rgb(255 255 255 / 0.26),
+    rgb(255 255 255 / 0.06) 70%
+  );
+}
+
+.mill__cta:hover svg,
+.mill__cta:focus-visible svg {
+  rotate: 90deg;
+}
+
+.mill a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.mill .mill__cta:focus-visible {
+  border-radius: 999px;
+}
+
+/* ---------- dark theme ---------- */
+
+html.dark-theme .mill {
+  --mill-ink: #e8e8ea;
+}
+
+/* ---------- very wide screens ---------- */
+
+/* the render is cropped top/bottom here, so show a little more of its
+   lower half to keep the windmill clear of the Discover button */
+@media (min-aspect-ratio: 17/9) {
+  .mill__render img {
+    object-position: 50.6% 62%;
+  }
+}
+
+/* ---------- portrait / phones ---------- */
+
+@media (max-aspect-ratio: 1/1) {
+  .mill {
+    --u: min(calc(100vw / 650), calc(100vh / 1400), 0.85px);
+    /* bottom stack = button + gap + headline (see sizes below) */
+    --mill-gap: max(1.5rem, 4vh);
+    /* render height: tall enough that the fur below the windmill holds
+       the headline + button, so the text never sits on the windmill */
+    --mill-h: calc(270px + 880 * var(--u));
+  }
+
+  @supports (height: 100svh) {
+    .mill {
+      --u: min(calc(100vw / 650), calc(100svh / 1400), 0.85px);
+      --mill-gap: max(1.5rem, 4svh);
+    }
+  }
+
+  .mill__render {
+    transform-origin: 50% calc(100% - var(--mill-h) * 0.52);
+  }
+
+  /* anchor the render to the bottom, centred on the ring, and fade its
+     top edge into the page */
+  .mill__render img {
+    position: absolute;
+    bottom: 0;
+    left: calc(50% - var(--mill-h) * 0.8096);
+    width: calc(var(--mill-h) * 1.6);
+    height: var(--mill-h);
+    max-width: none;
+    object-fit: fill;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 24%);
+    mask-image: linear-gradient(to bottom, transparent, #000 24%);
+  }
+
+  .mill__canvas {
+    --mill-top: calc(100% - var(--mill-h));
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent var(--mill-top),
+      #000 calc(var(--mill-top) + var(--mill-h) * 0.24)
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent var(--mill-top),
+      #000 calc(var(--mill-top) + var(--mill-h) * 0.24)
+    );
+  }
+
+  .mill__hint {
+    display: none;
+  }
+
+  .mill__mark {
+    top: calc(2rem + 48px + 1.5rem);
+    right: 1.5rem;
+  }
+
+  .mill__cta {
+    bottom: var(--mill-gap);
+    width: calc(340 * var(--u));
+    height: calc(88 * var(--u));
+    font-size: calc(36 * var(--u));
+  }
+
+  .mill__headline,
+  .mill__nav {
+    bottom: calc(var(--mill-gap) + 88 * var(--u) + 1.25rem);
+  }
+
+  .mill__headline {
+    left: 1.5rem;
+    width: max-content;
+  }
+
+  .mill__headline .mill__type {
+    font-size: calc(56 * var(--u));
+  }
+
+  .mill__nav {
+    top: auto;
+    left: auto;
+    right: 1.5rem;
+    width: auto;
+    font-size: calc(30 * var(--u));
+  }
+}
+
+/* ---------- motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .mill__render img {
+    animation: mill-settle 1800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .mill__frame {
+    animation: mill-fade 1400ms 500ms ease-out both;
+  }
+
+  /* letters pop in one by one in a scattered order */
+  .mill__ch {
+    display: inline-block;
+    animation: mill-ch 650ms var(--d) cubic-bezier(0.2, 0.9, 0.25, 1.25)
+      both;
+  }
+
+  .mill__arrow {
+    animation: mill-arrow 900ms 250ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  }
+
+  .mill__copy,
+  .mill__block {
+    animation: mill-pop 600ms 1150ms cubic-bezier(0.2, 0.9, 0.25, 1.4) both;
+  }
+
+  .mill__nav a {
+    animation: mill-rise 700ms calc(450ms + var(--i) * 90ms)
+      cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .mill__cta {
+    animation: mill-rise-cta 900ms 1000ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  /* intro waits (paused on its first frame) until the render is ready */
+  .mill:not(.is-ready) :is(
+      .mill__render img,
+      .mill__ch,
+      .mill__arrow,
+      .mill__copy,
+      .mill__block,
+      .mill__nav a
+    ) {
+    animation-play-state: paused;
+  }
+
+  .mill:not(.is-ready) :is(.mill__cta, .mill__frame) {
+    animation-play-state: paused, running;
+  }
+}
+
+@keyframes mill-settle {
+  from {
+    opacity: 0;
+    scale: calc(var(--mill-scale) * 1.1);
+  }
+}
+
+@keyframes mill-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes mill-ch {
+  0% {
+    opacity: 0;
+    translate: 0 0.4em;
+    rotate: var(--r);
+    scale: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+    rotate: 0deg;
+    scale: 1;
+  }
+}
+
+@keyframes mill-arrow {
+  from {
+    opacity: 0;
+    translate: -60% 0;
+  }
+}
+
+@keyframes mill-pop {
+  from {
+    opacity: 0;
+    scale: 0.3;
+  }
+}
+
+@keyframes mill-rise {
+  from {
+    opacity: 0;
+    translate: 0 0.6em;
+  }
+}
+
+@keyframes mill-rise-cta {
+  from {
+    opacity: 0;
+    translate: -50% 40%;
+  }
+}
+
+/* scrolling away: the render drifts slower than the page (parallax)
+   while the type lifts off and fades */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .mill-pin {
+      view-timeline: --mill block;
+    }
+
+    .mill__render {
+      animation: mill-dive linear both;
+      animation-timeline: --mill;
+      animation-range: exit 0% exit 100%;
+    }
+
+    .mill__frame {
+      animation: mill-fade 1400ms 500ms ease-out both,
+        mill-out linear both;
+      animation-timeline: auto, --mill;
+      animation-range: normal, contain 35% contain 95%;
+    }
+
+    .mill__nav,
+    .mill__mark,
+    .mill__headline,
+    .mill__hint {
+      animation: mill-lift linear both;
+      animation-timeline: --mill;
+      animation-range: contain 0% contain 45%;
+    }
+
+    .mill__cta {
+      animation: mill-rise-cta 900ms 1000ms cubic-bezier(0.2, 0.8, 0.2, 1)
+          both,
+        mill-out linear both;
+      animation-timeline: auto, --mill;
+      animation-range: normal, contain 0% contain 25%;
+    }
+  }
+}
+
+@keyframes mill-dive {
+  to {
+    translate: 0 30%;
+  }
+}
+
+@keyframes mill-lift {
+  to {
+    opacity: 0;
+    translate: 0 -12vh;
+  }
+}
+
+@keyframes mill-out {
+  to {
+    opacity: 0;
+  }
+}

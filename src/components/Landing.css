@@ -1,4 +1,8 @@
-
+/* wraps the name header + laptop so the header sits at the top of this
+   block (not the page), leaving room for the Mill hero above it */
+.landing {
+  position: relative;
+}
 
 .landing-header h1 {
   font-size: clamp(2rem, 5vw + 1rem, 8rem);

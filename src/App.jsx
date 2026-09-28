@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import MillHero from './components/MillHero.jsx'
 import Landing from './components/Landing.jsx'
 import Achievements from './components/Achievements.jsx'
 import ThemeToggle from './components/ThemeToggle.jsx'
@@ -12,6 +13,7 @@ import Footer from './components/Footer.jsx'
 function Home() {
   return (
     <>
+      <MillHero />
       <Landing />
       <Achievements />
       <Skills />
