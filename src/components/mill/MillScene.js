@@ -480,7 +480,8 @@ export function createMillScene(canvas, opts = {}) {
     const pitch = (state.pointerS.y + idleY * 0.4) * 0.07
 
     // scroll (while the hero is pinned): a camera move in stages
-    state.scrollS += (state.scroll - state.scrollS) * Math.min(1, dt * 5)
+    // eased heavily so fast wheel flicks still glide
+    state.scrollS += (state.scroll - state.scrollS) * Math.min(1, dt * 2)
     const sp = state.scrollS
     const shot = scrollShot(sp)
     const dist = CAM_DIST * shot.dist

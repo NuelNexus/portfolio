@@ -22,18 +22,18 @@
   font-display: swap;
 }
 
-/* the hero stays pinned for this extra scroll distance (about as long as
-   the laptop section) while the camera flies around the windmill, then the
-   page scrolls up over it */
+/* the hero stays pinned for this extra scroll distance while the camera
+   flies slowly around the windmill, then the page scrolls up over it.
+   Bigger value = longer, slower scroll. */
 .mill-pin {
-  --mill-pin: 400vh;
+  --mill-pin: 900vh;
   position: relative;
   height: calc(100vh + var(--mill-pin));
 }
 
 @supports (height: 100svh) {
   .mill-pin {
-    --mill-pin: 400svh;
+    --mill-pin: 900svh;
     height: calc(100svh + var(--mill-pin));
   }
 }
