@@ -128,6 +128,37 @@ function makeFur(group, seg, ring, uniforms) {
   return mesh
 }
 
+// Camera "shot list" for the pinned scroll, as keyframes over progress 0..1:
+// push in, swing round to the right, sweep back close past the windmill,
+// then settle before the next section covers it.
+const SHOT_KEYS = [
+  // p     dist  yaw    pitch  lift  spread spin
+  [0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0],
+  [0.22, 0.66, 0.08, 0.04, 0.0, 0.25, 2],
+  [0.5, 0.52, 0.78, 0.17, 0.04, 0.6, 5],
+  [0.78, 0.43, -0.38, 0.1, 0.06, 1.0, 9],
+  [1.0, 0.47, 0.0, 0.05, 0.05, 0.7, 6],
+]
+const shotOut = { dist: 1, yaw: 0, pitch: 0, lift: 0, spread: 0, spin: 0, near: 0 }
+function scrollShot(p) {
+  const k = SHOT_KEYS
+  let i = 0
+  while (i < k.length - 2 && p > k[i + 1][0]) i++
+  const a = k[i]
+  const b = k[i + 1]
+  let t = Math.min(1, Math.max(0, (p - a[0]) / (b[0] - a[0])))
+  t = t * t * (3 - 2 * t)
+  const m = (j) => a[j] + (b[j] - a[j]) * t
+  shotOut.dist = m(1)
+  shotOut.yaw = m(2)
+  shotOut.pitch = m(3)
+  shotOut.lift = m(4)
+  shotOut.spread = m(5)
+  shotOut.spin = m(6)
+  shotOut.near = Math.min(1, (1 - shotOut.dist) / 0.5)
+  return shotOut
+}
+
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {{ reduced?: boolean, onReady?: () => void, onError?: (e) => void }} opts
@@ -241,6 +272,7 @@ export function createMillScene(canvas, opts = {}) {
   const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -0.08)
   const tmpV3 = new THREE.Vector3()
   const tmpV2 = new THREE.Vector2()
+  const lookAt = new THREE.Vector3()
 
   // ---------- framing: map the 1600x1000 design frame onto a canvas rect
   function setFrame(rect, w, h) {
@@ -447,23 +479,24 @@ export function createMillScene(canvas, opts = {}) {
     const yaw = (state.pointerS.x + idleX * 0.4) * 0.11
     const pitch = (state.pointerS.y + idleY * 0.4) * 0.07
 
-    // scroll (while the hero is pinned): dive in and swing round the mill
-    state.scrollS += (state.scroll - state.scrollS) * Math.min(1, dt * 6)
+    // scroll (while the hero is pinned): a camera move in stages
+    state.scrollS += (state.scroll - state.scrollS) * Math.min(1, dt * 5)
     const sp = state.scrollS
-    const e = sp * sp * (3 - 2 * sp)
-    const dist = CAM_DIST * (1 - 0.52 * e)
-    const yawS = yaw + e * 0.62
-    const pitchS = pitch + e * 0.14
+    const shot = scrollShot(sp)
+    const dist = CAM_DIST * shot.dist
+    const yawS = yaw * (1 - shot.near * 0.5) + shot.yaw
+    const pitchS = pitch * (1 - shot.near * 0.5) + shot.pitch
     camera.position.set(
       Math.sin(yawS) * Math.cos(pitchS) * dist,
-      Math.sin(pitchS) * dist,
+      Math.sin(pitchS) * dist + shot.lift,
       Math.cos(yawS) * Math.cos(pitchS) * dist,
     )
-    camera.lookAt(0, 0, 0)
+    lookAt.set(0, shot.lift, 0.1 * shot.near)
+    camera.lookAt(lookAt)
 
     // blades
     state.boost *= Math.exp(-dt * 0.9)
-    const w = state.spin + state.boost + e * 7
+    const w = state.spin + state.boost + shot.spin
     state.bladeAngle += w * dt
     if (blades && state.bladeQ) {
       blades.quaternion
@@ -505,7 +538,7 @@ export function createMillScene(canvas, opts = {}) {
     const wantStr = state.hover ? 0.55 + state.brush * 0.9 : 0
     U.uMouseStr.value += (wantStr - U.uMouseStr.value) * Math.min(1, dt * 6)
     U.uGustAge.value = t - state.gustT0
-    U.uSpread.value = e
+    U.uSpread.value = shot.spread
     tmpV3.copy(KEY_POS).normalize().transformDirection(camera.matrixWorldInverse)
     U.uLight.value.copy(tmpV3)
   }

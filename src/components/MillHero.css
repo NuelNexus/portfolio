@@ -22,17 +22,18 @@
   font-display: swap;
 }
 
-/* the hero stays pinned for this extra scroll distance while the windmill
-   dives in, then the page scrolls up over it */
+/* the hero stays pinned for this extra scroll distance (about as long as
+   the laptop section) while the camera flies around the windmill, then the
+   page scrolls up over it */
 .mill-pin {
-  --mill-pin: 160vh;
+  --mill-pin: 400vh;
   position: relative;
   height: calc(100vh + var(--mill-pin));
 }
 
 @supports (height: 100svh) {
   .mill-pin {
-    --mill-pin: 160svh;
+    --mill-pin: 400svh;
     height: calc(100svh + var(--mill-pin));
   }
 }
@@ -578,7 +579,7 @@ html.dark-theme .mill {
       animation: mill-fade 1400ms 500ms ease-out both,
         mill-out linear both;
       animation-timeline: auto, --mill;
-      animation-range: normal, contain 35% contain 95%;
+      animation-range: normal, contain 10% contain 40%;
     }
 
     .mill__nav,
@@ -587,7 +588,7 @@ html.dark-theme .mill {
     .mill__hint {
       animation: mill-lift linear both;
       animation-timeline: --mill;
-      animation-range: contain 0% contain 45%;
+      animation-range: contain 0% contain 14%;
     }
 
     .mill__cta {
@@ -595,7 +596,7 @@ html.dark-theme .mill {
           both,
         mill-out linear both;
       animation-timeline: auto, --mill;
-      animation-range: normal, contain 0% contain 25%;
+      animation-range: normal, contain 0% contain 8%;
     }
   }
 }
